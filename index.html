@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Surat Tugas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Konfigurasi Tailwind CSS (opsional, bisa disesuaikan)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0A1A2F', // Warna dasar biru tua
+                        secondary: '#1E3A5F', // Warna biru lebih terang
+                        accent: '#D4AF37',   // Warna emas/kuning untuk aksen
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Menggunakan font Times New Roman untuk tampilan surat */
+        @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap');
+        body { font-family: 'Times New Roman', serif; }
+        .surat-body { font-family: 'Times New Roman', serif; line-height: 1.6; }
+        
+        /* Pengaturan untuk cetak */
+        @media print {
+            body { visibility: hidden; } /* Sembunyikan semua kecuali area cetak */
+            #previewArea {
+                visibility: visible;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 21cm; /* Lebar A4 */
+                min-height: 29.7cm; /* Tinggi A4 */
+                margin: 0;
+                padding: 1cm 2cm; /* Margin halaman untuk cetak */
+                box-shadow: none; /* Hilangkan bayangan saat cetak */
+            }
+            .no-print {
+                display: none !important; /* Sembunyikan elemen dengan kelas no-print saat mencetak */
+            }
+            /* Menjaga warna header gambar kop surat */
+            img { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- NAVBAR (Tidak akan tercetak) -->
+<nav class="bg-primary text-white p-4 shadow-lg no-print">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold"><i class="fas fa-file-alt mr-2"></i>Aplikasi Pembuat Surat Tugas</h1>
+        <button onclick="location.reload()" class="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700">
+            <i class="fas fa-redo-alt"></i> Reset Formulir
+        </button>
+    </div>
+</nav>
+
+<!-- FORM INPUT (Tidak akan tercetak) -->
+<div id="formArea" class="container mx-auto p-6 no-print">
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        
+        <h2 class="text-2xl font-bold text-primary mb-6 text-center border-b-2 pb-3">Isi Data Surat Tugas</h2>
+
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Bagian Informasi Surat -->
+            <div>
+                <label class="block font-semibold mb-2" for="nomorSurat">NOMOR SURAT</label>
+                <input type="text" id="nomorSurat" placeholder="Contoh: B.980/Ma.10.20/KP.04.1/3/2026" 
+                    value="B.980/Ma.10.20/KP.04.1/3/2026"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2" for="perihalSurat">PERIHAL SURAT (Menimbang a)</label>
+                <input type="text" id="perihalSurat" placeholder="Contoh: Pelatihan MGMP Fikih MA Se-Kabupaten Tasikmalaya" 
+                    value="Pelatihan MGMP Fikih MA Se-Kabupaten Tasikmalaya"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <!-- Bagian Informasi Pegawai -->
+            <div>
+                <label class="block font-semibold mb-2" for="namaPegawai">NAMA PEGAWAI</label>
+                <input type="text" id="namaPegawai" placeholder="Contoh: ADE RUHIYAT, S.Pd.I." 
+                    value="ADE RUHIYAT, S.Pd.I."
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2" for="nipPegawai">NIP PEGAWAI</label>
+                <input type="text" id="nipPegawai" placeholder="Contoh: 198107052025211015" 
+                    value="198107052025211015"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2" for="jabatanPegawai">JABATAN PEGAWAI</label>
+                <input type="text" id="jabatanPegawai" placeholder="Contoh: Operator Madrasah" 
+                    value="Operator Madrasah"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2" for="tempatTugasPegawai">TEMPAT TUGAS PEGAWAI</label>
+                <input type="text" id="tempatTugasPegawai" placeholder="Contoh: MAN 1 Tasikmalaya" 
+                    value="MAN 1 Tasikmalaya"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <!-- Bagian Uraian Tugas -->
+            <div class="md:col-span-2">
+                <label class="block font-semibold mb-2" for="uraianTugas">URAIAN TUGAS (Untuk point 1)</label>
+                <textarea id="uraianTugas" rows="3" 
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">Koordinasi pencetakan dan validasi Data PDUM KKM Man 1 Tasikmalaya</textarea>
+            </div>
+            
+            <!-- Bagian Pelaksanaan -->
+            <div>
+                <label class="block font-semibold mb-2" for="tglPelaksanaan">TANGGAL PELAKSANAAN (Hari / Tanggal)</label>
+                <input type="text" id="tglPelaksanaan" placeholder="Contoh: Sabtu, 28 Maret 2026" 
+                    value="Sabtu, 28 Maret 2026"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2" for="tempatPelaksanaan">TEMPAT PELAKSANAAN</label>
+                <input type="text" id="tempatPelaksanaan" placeholder="Contoh: MA Al Yahya" 
+                    value="MA Al Yahya"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block font-semibold mb-2" for="titiMangsa">TANGGAL TITI MANGSA (Tempat, Tanggal Surat)</label>
+                <input type="text" id="titiMangsa" placeholder="Contoh: Tasikmalaya, 27 Maret 2026" 
+                    value="Tasikmalaya, 27 Maret 2026"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="md:col-span-2 pt-4 border-t flex flex-wrap gap-4 justify-end">
+                <button type="button" onclick="previewSurat()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition-colors">
+                    <i class="fas fa-eye"></i> Lihat & Sesuaikan Surat
+                </button>
+                <button type="button" onclick="window.print()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-md transition-colors">
+                    <i class="fas fa-print"></i> Cetak Surat
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- AREA PREVIEW / CETAK -->
+<div id="previewArea" class="hidden container mx-auto p-6 mt-4 bg-white shadow-xl border">
+    
+    <!-- KOP SURAT DENGAN GAMBAR -->
+    <div class="text-center border-b-2 border-black pb-4 mb-6">
+        <img src="https://drive.google.com/uc?id=1dlJ3AK25YfrcT6FzlCIZ8pzmL_z62e-X" alt="Kop Surat Madrasah" class="w-full h-auto max-h-[120px] object-contain mx-auto">
+    </div>
+
+    <!-- JUDUL SURAT -->
+    <h2 class="text-center text-lg font-bold underline mb-2">SURAT TUGAS</h2>
+    <p class="text-center mb-6">Nomor : <span id="vNoSurat" class="font-semibold"></span></p>
+
+    <!-- ISI SURAT -->
+    <div class="surat-body text-base text-justify">
+        
+        <table class="w-full mb-4">
+            <tr>
+                <td class="align-top font-bold w-28">Menimbang</td>
+                <td class="align-top font-bold">:</td>
+                <td class="align-top pl-2">
+                    <p>a. Bahwa berdasarkan Surat yang diterima dari Musyawarah Guru Mata Pelajaran (MGMP) Fikih MA Kabupaten Tasikmalaya perihal <span id="vPerihalSurat" class="font-semibold"></span>;</p>
+                    <p>b. Bahwa yang namanya tercantum dalam surat ini dianggap layak dan mampu melaksanakan tugas dan fungsi pencapaian target rencana kegiatan dimaksud;</p>
+                    <p>c. Bahwa berdasarkan pertimbangan sebagaimana dimaksud pada huruf a dan b di atas perlu menerbitkan surat tugas.</p>
+                </td>
+            </tr>
+        </table>
+
+        <table class="w-full mb-4">
+            <tr>
+                <td class="align-top font-bold w-28">Dasar</td>
+                <td class="align-top font-bold">:</td>
+                <td class="align-top pl-2">
+                    <p>1. Peraturan Menteri Agama Nomor 13 Tahun 2012 tentang Organisasi dan Tata Kerja Instansi Vertikal Kementerian Agama;</p>
+                    <p>2. Peraturan Menteri Agama RI Nomor 28 Tahun 2013 yang diubah dengan Peraturan Menteri Agama Nomor 45 Tahun 2015 tentang Disiplin Kehadiran Pegawai Negeri Sipil di Kementerian Agama;</p>
+                    <p>3. Peraturan Menteri Keuangan RI Nomor 113/PMK.05/2012 tentang Perjalanan Dinas;</p>
+                    <p>4. Keputusan Menteri Agama RI Nomor 9 Tahun 2016 tentang Naskah Dinas pada Kementerian Agama.</p>
+                </td>
+            </tr>
+        </table>
+
+        <h3 class="text-center font-bold text-lg my-4">MEMBERI TUGAS</h3>
+
+        <table class="w-full mb-4">
+            <tr>
+                <td class="align-top font-bold w-28">Kepada</td>
+                <td class="align-top font-bold">:</td>
+                <td class="align-top pl-2">
+                    <table class="border-collapse">
+                        <tr><td class="pr-4">Nama</td><td class="px-2">:</td><td id="vNamaPegawai"></td></tr>
+                        <tr><td class="pr-4">NIP</td><td class="px-2">:</td><td id="vNipPegawai"></td></tr>
+                        <tr><td class="pr-4">Jabatan</td><td class="px-2">:</td><td id="vJabatanPegawai"></td></tr>
+                        <tr><td class="pr-4">Tempat Tugas</td><td class="px-2">:</td><td id="vTempatTugasPegawai"></td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <table class="w-full mb-6">
+            <tr>
+                <td class="align-top font-bold w-28">Untuk</td>
+                <td class="align-top font-bold">:</td>
+                <td class="align-top pl-2">
+                    <p>1. <span id="vUraianTugas"></span></p>
+                    <p>2. Waktu dan tempat pelaksanaan kegiatan:</p>
+                    <table class="ml-4 mt-2 border-collapse">
+                        <tr><td class="pr-4">Hari / Tanggal</td><td class="px-2">:</td><td id="vTglPelaksanaan"></td></tr>
+                        <tr><td class="pr-4">Tempat</td><td class="px-2">:</td><td id="vTempatPelaksanaan"></td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <p class="mt-6">Demikian surat tugas ini dibuat untuk dilaksanakan sebagaimana mestinya.</p>
+
+        <!-- TANDA TANGAN -->
+        <div class="mt-12 text-right">
+            <p id="vTitiMangsa"></p>
+            <p class="mt-8">Kepala,</p>
+            <p class="mt-16 font-bold">H. Eka Mulyana, S. Ag., M. Pd. I.</p>
+            <p class="font-bold">NIP. 197601202007101001</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- TOMBOL WA (Tidak akan tercetak) -->
+<a href="https://wa.me/6281234567890?text=Assalamualaikum,%20Bilih%20teu%20ngartos%20punten..." target="_blank" 
+    class="fixed bottom-6 right-6 bg-green-500 text-white px-4 py-2 rounded-full shadow-lg z-50 no-print hover:bg-green-600 transition-colors">
+    <i class="fab fa-whatsapp text-xl mr-2"></i> Bilih Teu Ngartos
+</a>
+
+<script>
+    function previewSurat(){
+        // Ambil nilai dari input form
+        const nomorSurat = document.getElementById('nomorSurat').value;
+        const perihalSurat = document.getElementById('perihalSurat').value;
+        const namaPegawai = document.getElementById('namaPegawai').value;
+        const nipPegawai = document.getElementById('nipPegawai').value;
+        const jabatanPegawai =
